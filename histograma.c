@@ -36,8 +36,7 @@ int main(void)
 	/*Zerando as posições de memória*/
 	memset(ocorrenciasPixels, 0, sizeof(ocorrenciasPixels));
 
-	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++)
-		numero[i] = -1;
+	memset(numero, -1, sizeof(numero));
 	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
 		int linhasPuladas = 0;
@@ -75,8 +74,7 @@ int main(void)
 				int valorPixel = atoi(numero);
 				ocorrenciasPixels[valorPixel]++;
 				/*Limpa array do valor do pixel*/
-				for(i = 0; i <= TAMANHO_DIGITO_NUMERO;i++)
-					numero[i] = -1;
+				memset(numero, -1, sizeof(numero));
 
 			} else if(charAtual != EOF){
 				/*Caracter estranho*/
