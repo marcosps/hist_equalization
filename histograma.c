@@ -40,20 +40,22 @@ int main(void)
 		numero[i] = -1;
 	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
-		/*Arquivo do formato esperado*/
-		/*Pula o cabeçalho do arquivo*/
 		int linhasPuladas = 0;
-		while((!feof(arquivo) && linhasPuladas < 3)){
-			char proximoChar = fgetc(arquivo);
-			if(proximoChar == '#'){ /* Ignora linha de comentario*/
-                        	while(fgetc(arquivo) != NOVA_LINHA){}
-                        }else if(proximoChar == NOVA_LINHA){
-				linhasPuladas++;
-			}
-		}
+		char charAtual;
+
 		/*Lê o arquivo até o talo! */
 		while (!feof(arquivo)) {
-			char charAtual = fgetc(arquivo);
+			charAtual = fgetc(arquivo);
+
+			if(charAtual == '#') /* Ignora linha de comentario*/
+                        	while(fgetc(arquivo) != NOVA_LINHA);
+
+                        else if (charAtual == NOVA_LINHA)
+				linhasPuladas++;
+
+			/* Pula cabecalho */
+			if (linhasPuladas < 3)
+				continue;
 
 			if (isdigit(charAtual)){
 				/*Insere digito no array para formar o valor do pixel */
