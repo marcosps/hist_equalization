@@ -23,13 +23,14 @@ int main(void)
 	 *Dessa forma o número de ocorrências de pixels com valor 1 fica
          *na posição 1 e assim em diante */
 	int ocorrenciasPixels[MAIOR_VALOR_PIXEL+1];
+	int i;
 	
 	/*Zerando as posições de memória*/
-	for(int index = 1; index <= MAIOR_VALOR_PIXEL;index++){
-		ocorrenciasPixels[index] = 0;
+	for(i = 1; i <= MAIOR_VALOR_PIXEL;i++){
+		ocorrenciasPixels[i] = 0;
 	}	
-	for(int index = 0; index < TAMANHO_DIGITO_NUMERO;index++){
-		numero[index] = -1;
+	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++){
+		numero[i] = -1;
 	}
 	
 	if(!arquivo){
@@ -54,9 +55,9 @@ int main(void)
 				char charAtual = fgetc(arquivo);
 				if(isdigit(charAtual)){
 					/*Insere digito no array para formar o valor do pixel */
-					for(int index = 0; index < TAMANHO_DIGITO_NUMERO; index++){
-						if(numero[index] == -1){
-							numero[index] = charAtual;
+					for(int i = 0; i < TAMANHO_DIGITO_NUMERO; i++){
+						if(numero[i] == -1){
+							numero[i] = charAtual;
 							break;
 						}
 					}
@@ -65,8 +66,8 @@ int main(void)
 					int valorPixel = atoi(numero);
 					ocorrenciasPixels[valorPixel]++;
 					/*Limpa array do valor do pixel*/
-					for(int index = 0; index <= TAMANHO_DIGITO_NUMERO;index++){
-						numero[index] = -1;
+					for(int i = 0; i <= TAMANHO_DIGITO_NUMERO;i++){
+						numero[i] = -1;
 					
 					}					
 				}else if(charAtual != EOF){
@@ -75,9 +76,9 @@ int main(void)
 					return 1;
 				}
 			}		
-		for(int index = 1; index <=MAIOR_VALOR_PIXEL;index++){
-			if(ocorrenciasPixels[index] > 0){
-				printf("O valor %d possui %d ocorrências\n", index,ocorrenciasPixels[index]);
+		for(int i = 1; i <=MAIOR_VALOR_PIXEL;i++){
+			if(ocorrenciasPixels[i] > 0){
+				printf("O valor %d possui %d ocorrências\n", i,ocorrenciasPixels[i]);
 			}
 		}		
 	}
