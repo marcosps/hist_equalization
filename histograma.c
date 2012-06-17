@@ -47,8 +47,13 @@ int main(void)
 		while (!feof(arquivo)) {
 			charAtual = fgetc(arquivo);
 
-			if(charAtual == '#') /* Ignora linha de comentario*/
+			if(charAtual == '#') { /* Ignora linha de comentario*/
                         	while(fgetc(arquivo) != NOVA_LINHA);
+				/* Se houver uma linha de comentario, estao decrementamos o numero de linhas
+				 * puladas, uma vez que o numero de linhas de cabecalho agora é 4, devemos pular
+				 * de linhas mais uma vez */
+				linhasPuladas--;
+			}
 
                         else if (charAtual == NOVA_LINHA)
 				linhasPuladas++;
