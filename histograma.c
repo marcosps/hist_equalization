@@ -19,13 +19,19 @@
 
 int main(void)
 {
-	FILE *arquivo = fopen("Unequalized_Hawkes_Bay.pgm","r");
-	char numero[TAMANHO_DIGITO_NUMERO];
 	/*É somando 1 para que não seja necessário utilizar o posição 0.
 	 *Dessa forma o número de ocorrências de pixels com valor 1 fica
          *na posição 1 e assim em diante */
-	int ocorrenciasPixels[MAIOR_VALOR_PIXEL+1];
-	int i;
+	int ocorrenciasPixels[MAIOR_VALOR_PIXEL+1], i;
+	char numero[TAMANHO_DIGITO_NUMERO];
+	FILE *arquivo = fopen("Unequalized_Hawkes_Bay.pgm","r");
+
+	if(!arquivo){
+		printf("Perdeu playboy! Arquivo não encontradoo.\n");
+		return 1;
+	}
+
+	printf("Eh nois que voa bruxão!\n");
 	
 	/*Zerando as posições de memória*/
 	memset(ocorrenciasPixels, 0, sizeof(ocorrenciasPixels));
@@ -33,11 +39,6 @@ int main(void)
 	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++)
 		numero[i] = -1;
 	
-	if(!arquivo){
-		printf("Perdeu playboy! Arquivo não encontradoo.\n");
-		return 1;
-	}
-	printf("Eh nois que voa bruxão!\n");
 	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
 		/*Arquivo do formato esperado*/
