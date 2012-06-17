@@ -1,0 +1,260 @@
+From 7ad3639c60d10d8281cd5d9a575d8565a7af75e5 Mon Sep 17 00:00:00 2001
+From: Jose Guilherme Vanz <guilherme.sft@gmail.com>
+Date: Sun, 17 Jun 2012 01:03:33 -0300
+Subject: [PATCH 1/2] =?UTF-8?q?Implementa=C3=A7=C3=A3o=20da=20gera=C3=A7=C3=A3?=
+ =?UTF-8?q?o=20do=20histograma.=20A=20implementa=C3=A7=C3=A3o=20foi=20feita=20?=
+ =?UTF-8?q?em=20um=20fonte=20separado,=20mas=20devera=20ser=20colocado=20com?=
+ =?UTF-8?q?o=20um=20fun=C3=A7=C3=A3o=20dos=20fontes=20principais.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: José Guilherme Vanz <guilherme.sft@gmail.com>
+---
+ .histograma.c.swp |  Bin 0 -> 12288 bytes
+ a.out             |  Bin 0 -> 8351 bytes
+ histograma.c      |   86 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ teste.pgm         |    4 +++
+ teste.pgm~        |    4 +++
+ 5 files changed, 94 insertions(+)
+ create mode 100644 .histograma.c.swp
+ create mode 100755 a.out
+ create mode 100644 histograma.c
+ create mode 100644 teste.pgm
+ create mode 100644 teste.pgm~
+
+diff --git a/.histograma.c.swp b/.histograma.c.swp
+new file mode 100644
+index 0000000000000000000000000000000000000000..4139bc4e1ef4b905056263699e5d18e1fffc1f16
+GIT binary patch
+literal 12288
+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
+DL1Qa~
+
+literal 0
+HcmV?d00001
+
+diff --git a/a.out b/a.out
+new file mode 100755
+index 0000000000000000000000000000000000000000..64b979aaacc466f572dea173076ed0f897dd8a1f
+GIT binary patch
+literal 8351
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/histograma.c b/histograma.c
+new file mode 100644
+index 0000000..ead5b8c
+--- /dev/null
++++ b/histograma.c
+@@ -0,0 +1,86 @@
++/*
++* Esse fonte é responsável em gerar o histograma da imagem. Atualmente ele está em um fonte separado, mas futuramente o fonte será colocado 
++* dentro de uma função em outro fonte.
++* É necessário também que o código seja otmizado. Porque o código está horrivel! D:
++* TODO - Otimização
++* TODO - Definir o maior valor possível de um pixel dinamicamente
++* TODO - Definir a quantidade de dígitos do valor do pixel dinamicamente
++*/
++
++#include<stdio.h>
++#include<ctype.h>
++
++#define NOVA_LINHA 10  /*Define do \n ( nova linha ) */
++#define ESPACO 32 /*Define do  ' ' ( espaço em branco) */
++#define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
++#define MAIOR_VALOR_PIXEL 255 /*Define o maior valor possível de um pixel*/
++
++int main(void)
++{
++	FILE *arquivo = fopen("Unequalized_Hawkes_Bay.pgm","r");
++	char numero[TAMANHO_DIGITO_NUMERO];
++	/*É somando 1 para que não seja necessário utilizar o posição 0.
++	 *Dessa forma o número de ocorrências de pixels com valor 1 fica
++         *na posição 1 e assim em diante */
++	int ocorrenciasPixels[MAIOR_VALOR_PIXEL+1];
++	
++	/*Zerando as posições de memória*/
++	for(int index = 1; index <= MAIOR_VALOR_PIXEL;index++){
++		ocorrenciasPixels[index] = 0;
++	}	
++	for(int index = 0; index < TAMANHO_DIGITO_NUMERO;index++){
++		numero[index] = -1;
++	}
++	
++	if(!arquivo){
++		printf("Perdeu playboy! Arquivo não encontradoo.\n");
++		return 1;
++	}
++	printf("Eh nois que voa bruxão!\n");
++		if(fgetc(arquivo) == 'P' & fgetc(arquivo) == '2'){
++		/*Arquivo do formato esperado*/
++		/*Pula o cabeçalho do arquivo*/
++		int linhasPuladas = 0;
++		while(!feof(arquivo) & linhasPuladas < 3){
++			char proximoChar = fgetc(arquivo);
++			if(proximoChar == '#'){ /* Ignora linha de comentario*/
++                        	while(fgetc(arquivo) != NOVA_LINHA){}
++                        }else if(proximoChar == NOVA_LINHA){
++				linhasPuladas++;
++			}
++		}
++		/*Lê o arquivo até o talo! */
++			while(!feof(arquivo)){
++				char charAtual = fgetc(arquivo);
++				if(isdigit(charAtual)){
++					/*Insere digito no array para formar o valor do pixel */
++					for(int index = 0; index < TAMANHO_DIGITO_NUMERO; index++){
++						if(numero[index] == -1){
++							numero[index] = charAtual;
++							break;
++						}
++					}
++				}else if(isblank(charAtual) || charAtual == NOVA_LINHA){
++					/*Contabiliza o pixel*/
++					int valorPixel = atoi(numero);
++					ocorrenciasPixels[valorPixel]++;
++					/*Limpa array do valor do pixel*/
++					for(int index = 0; index <= TAMANHO_DIGITO_NUMERO;index++){
++						numero[index] = -1;
++					
++					}					
++				}else if(charAtual != EOF){
++					/*Caracter estranho*/
++					printf("Caracter não esperado! Encontrado: %d :(\n", charAtual);
++					return 1;
++				}
++			}		
++		for(int index = 1; index <=MAIOR_VALOR_PIXEL;index++){
++			if(ocorrenciasPixels[index] > 0){
++				printf("O valor %d possui %d ocorrências\n", index,ocorrenciasPixels[index]);
++			}
++		}		
++	}
++	fclose(arquivo);
++	printf("Acabou!\n");
++}
+diff --git a/teste.pgm b/teste.pgm
+new file mode 100644
+index 0000000..5b04136
+--- /dev/null
++++ b/teste.pgm
+@@ -0,0 +1,4 @@
++P2
++300 200
++255
++153 140 143 140 134 129 128 147 149 140 135 138 145 149 151 153 153 153 161
+diff --git a/teste.pgm~ b/teste.pgm~
+new file mode 100644
+index 0000000..bd1201e
+--- /dev/null
++++ b/teste.pgm~
+@@ -0,0 +1,4 @@
++P2
++300 200
++255
++253 140 143 140 134 129 128 147 149 140 135 138 145 149 151 153 153 153 161
+-- 
+1.7.10.2
+
