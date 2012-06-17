@@ -9,6 +9,7 @@
 
 #include<stdio.h>
 #include<ctype.h>
+#include<stdlib.h>
 
 #define NOVA_LINHA 10  /*Define do \n ( nova linha ) */
 #define ESPACO 32 /*Define do  ' ' ( espaço em branco) */
@@ -26,19 +27,19 @@ int main(void)
 	int i;
 	
 	/*Zerando as posições de memória*/
-	for(i = 1; i <= MAIOR_VALOR_PIXEL;i++){
+	for(i = 1; i <= MAIOR_VALOR_PIXEL;i++)
 		ocorrenciasPixels[i] = 0;
-	}	
-	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++){
+
+	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++)
 		numero[i] = -1;
-	}
 	
 	if(!arquivo){
 		printf("Perdeu playboy! Arquivo não encontradoo.\n");
 		return 1;
 	}
 	printf("Eh nois que voa bruxão!\n");
-		if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
+	
+	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
 		/*Arquivo do formato esperado*/
 		/*Pula o cabeçalho do arquivo*/
 		int linhasPuladas = 0;
@@ -53,35 +54,35 @@ int main(void)
 		/*Lê o arquivo até o talo! */
 			while(!feof(arquivo)){
 				char charAtual = fgetc(arquivo);
-				if(isdigit(charAtual)){
+
+				if (isdigit(charAtual)){
 					/*Insere digito no array para formar o valor do pixel */
-					for(int i = 0; i < TAMANHO_DIGITO_NUMERO; i++){
+					for(i = 0; i < TAMANHO_DIGITO_NUMERO; i++)
 						if(numero[i] == -1){
 							numero[i] = charAtual;
 							break;
 						}
-					}
-				}else if(isblank(charAtual) || charAtual == NOVA_LINHA){
+
+				} else if (isblank(charAtual) || charAtual == NOVA_LINHA){
 					/*Contabiliza o pixel*/
 					int valorPixel = atoi(numero);
 					ocorrenciasPixels[valorPixel]++;
 					/*Limpa array do valor do pixel*/
-					for(int i = 0; i <= TAMANHO_DIGITO_NUMERO;i++){
+					for(i = 0; i <= TAMANHO_DIGITO_NUMERO;i++)
 						numero[i] = -1;
-					
-					}					
-				}else if(charAtual != EOF){
+			
+				} else if(charAtual != EOF){
 					/*Caracter estranho*/
 					printf("Caracter não esperado! Encontrado: %d :(\n", charAtual);
 					return 1;
 				}
-			}		
-		for(int i = 1; i <=MAIOR_VALOR_PIXEL;i++){
-			if(ocorrenciasPixels[i] > 0){
-				printf("O valor %d possui %d ocorrências\n", i,ocorrenciasPixels[i]);
 			}
-		}		
+		for(i = 1; i <=MAIOR_VALOR_PIXEL;i++)
+			if(ocorrenciasPixels[i] > 0)
+				printf("O valor %d possui %d ocorrências\n", i,ocorrenciasPixels[i]);
 	}
 	fclose(arquivo);
 	printf("Acabou!\n");
+
+	return 0;
 }
