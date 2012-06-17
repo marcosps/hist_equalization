@@ -12,7 +12,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define NOVA_LINHA 10  /*Define do \n ( nova linha ) */
 #define ESPACO 32 /*Define do  ' ' ( espaço em branco) */
 #define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
 #define MAIOR_VALOR_PIXEL 255 /*Define o maior valor possível de um pixel*/
@@ -36,10 +35,10 @@ int main(void)
 	/*Zerando as posições de memória*/
 	memset(ocorrenciasPixels, 0, sizeof(ocorrenciasPixels));
 
-	memset(numero, -1, sizeof(numero));
+	memset(numero, 0, sizeof(numero));
 	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
-		int linhasPuladas = 0;
+		int linhasPuladas = 0, pos_numero = 0;
 		char charAtual;
 
 		/*Lê o arquivo até o talo! */
@@ -47,36 +46,32 @@ int main(void)
 			charAtual = fgetc(arquivo);
 
 			if(charAtual == '#') { /* Ignora linha de comentario*/
-                        	while(fgetc(arquivo) != NOVA_LINHA);
+                        	while(fgetc(arquivo) != '\n');
 				/* Se houver uma linha de comentario, estao decrementamos o numero de linhas
 				 * puladas, uma vez que o numero de linhas de cabecalho agora é 4, devemos pular
 				 * de linhas mais uma vez */
 				linhasPuladas--;
 			}
 
-                        else if (charAtual == NOVA_LINHA)
+                        else if (charAtual == '\n')
 				linhasPuladas++;
 
 			/* Pula cabecalho */
 			if (linhasPuladas < 3)
 				continue;
 
-			if (isdigit(charAtual)){
+			if (isdigit(charAtual)) {
 				/*Insere digito no array para formar o valor do pixel */
-				for(i = 0; i < TAMANHO_DIGITO_NUMERO; i++)
-					if(numero[i] == -1){
-						numero[i] = charAtual;
-						break;
-					}
+				numero[pos_numero++] = charAtual;
 
-			} else if (isblank(charAtual) || charAtual == NOVA_LINHA){
+			} else if (isblank(charAtual) || charAtual == '\n') {
 				/*Contabiliza o pixel*/
-				int valorPixel = atoi(numero);
-				ocorrenciasPixels[valorPixel]++;
+				ocorrenciasPixels[atoi(numero)]++;
 				/*Limpa array do valor do pixel*/
-				memset(numero, -1, sizeof(numero));
+				memset(numero, 0, sizeof(numero));
+				pos_numero = 0;
 
-			} else if(charAtual != EOF){
+			} else if(charAtual != EOF) {
 				/*Caracter estranho*/
 				printf("Caracter não esperado! Encontrado: %d :(\n", charAtual);
 				return 1;
