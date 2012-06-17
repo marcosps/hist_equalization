@@ -38,11 +38,11 @@ int main(void)
 		return 1;
 	}
 	printf("Eh nois que voa bruxão!\n");
-		if(fgetc(arquivo) == 'P' & fgetc(arquivo) == '2'){
+		if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
 		/*Arquivo do formato esperado*/
 		/*Pula o cabeçalho do arquivo*/
 		int linhasPuladas = 0;
-		while(!feof(arquivo) & linhasPuladas < 3){
+		while((!feof(arquivo) && linhasPuladas < 3)){
 			char proximoChar = fgetc(arquivo);
 			if(proximoChar == '#'){ /* Ignora linha de comentario*/
                         	while(fgetc(arquivo) != NOVA_LINHA){}
