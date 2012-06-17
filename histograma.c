@@ -39,7 +39,6 @@ int main(void)
 	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++)
 		numero[i] = -1;
 	
-	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
 		/*Arquivo do formato esperado*/
 		/*Pula o cabeçalho do arquivo*/
@@ -53,35 +52,40 @@ int main(void)
 			}
 		}
 		/*Lê o arquivo até o talo! */
-			while(!feof(arquivo)){
-				char charAtual = fgetc(arquivo);
+		while (!feof(arquivo)) {
+			char charAtual = fgetc(arquivo);
 
-				if (isdigit(charAtual)){
-					/*Insere digito no array para formar o valor do pixel */
-					for(i = 0; i < TAMANHO_DIGITO_NUMERO; i++)
-						if(numero[i] == -1){
-							numero[i] = charAtual;
-							break;
-						}
+			if (isdigit(charAtual)){
+				/*Insere digito no array para formar o valor do pixel */
+				for(i = 0; i < TAMANHO_DIGITO_NUMERO; i++)
+					if(numero[i] == -1){
+						numero[i] = charAtual;
+						break;
+					}
 
-				} else if (isblank(charAtual) || charAtual == NOVA_LINHA){
-					/*Contabiliza o pixel*/
-					int valorPixel = atoi(numero);
-					ocorrenciasPixels[valorPixel]++;
-					/*Limpa array do valor do pixel*/
-					for(i = 0; i <= TAMANHO_DIGITO_NUMERO;i++)
-						numero[i] = -1;
-			
-				} else if(charAtual != EOF){
-					/*Caracter estranho*/
-					printf("Caracter não esperado! Encontrado: %d :(\n", charAtual);
-					return 1;
-				}
+			} else if (isblank(charAtual) || charAtual == NOVA_LINHA){
+				/*Contabiliza o pixel*/
+				int valorPixel = atoi(numero);
+				ocorrenciasPixels[valorPixel]++;
+				/*Limpa array do valor do pixel*/
+				for(i = 0; i <= TAMANHO_DIGITO_NUMERO;i++)
+					numero[i] = -1;
+
+			} else if(charAtual != EOF){
+				/*Caracter estranho*/
+				printf("Caracter não esperado! Encontrado: %d :(\n", charAtual);
+				return 1;
 			}
-		for(i = 1; i <=MAIOR_VALOR_PIXEL;i++)
-			if(ocorrenciasPixels[i] > 0)
+		}
+
+		for(i = 1; i <= MAIOR_VALOR_PIXEL; i++)
+			if (ocorrenciasPixels[i] > 0)
 				printf("O valor %d possui %d ocorrências\n", i,ocorrenciasPixels[i]);
+
+	} else {
+		printf("Arquivo não segue formato PGM ASCII!\n");
 	}
+
 	fclose(arquivo);
 	printf("Acabou!\n");
 
