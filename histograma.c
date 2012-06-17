@@ -10,6 +10,7 @@
 #include<stdio.h>
 #include<ctype.h>
 #include<stdlib.h>
+#include<string.h>
 
 #define NOVA_LINHA 10  /*Define do \n ( nova linha ) */
 #define ESPACO 32 /*Define do  ' ' ( espaço em branco) */
@@ -27,8 +28,7 @@ int main(void)
 	int i;
 	
 	/*Zerando as posições de memória*/
-	for(i = 1; i <= MAIOR_VALOR_PIXEL;i++)
-		ocorrenciasPixels[i] = 0;
+	memset(ocorrenciasPixels, 0, sizeof(ocorrenciasPixels));
 
 	for(i = 0; i < TAMANHO_DIGITO_NUMERO;i++)
 		numero[i] = -1;
