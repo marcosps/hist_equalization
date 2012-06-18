@@ -1,8 +1,7 @@
 /*
-* Esse fonte é responsável em gerar o histograma da imagem. Atualmente ele está em um fonte separado, mas futuramente o fonte será colocado 
-* dentro de uma função em outro fonte.
-* É necessário também que o código seja otmizado. Porque o código está horrivel! D:
-* TODO - Otimização
+* Esse fonte é responsável em gerar o histograma da imagem. 
+* Atualmente ele está em um fonte separado, mas futuramente o fonte 
+* será colocado dentro de uma função em outro fonte.
 * TODO - Definir o maior valor possível de um pixel dinamicamente
 * TODO - Definir a quantidade de dígitos do valor do pixel dinamicamente
 */
@@ -28,12 +27,9 @@ int main(void)
 		printf("Perdeu playboy! Arquivo não encontradoo.\n");
 		return 1;
 	}
-
-	printf("Eh nois que voa bruxão!\n");
 	
 	/*Zerando as posições de memória*/
 	memset(ocorrenciasPixels, 0, sizeof(ocorrenciasPixels));
-
 	memset(numero, 0, sizeof(numero));
 	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
