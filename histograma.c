@@ -2,7 +2,6 @@
 * Esse fonte é responsável em gerar o histograma da imagem. 
 * Atualmente ele está em um fonte separado, mas futuramente o fonte 
 * será colocado dentro de uma função em outro fonte.
-* TODO - Definir o maior valor possível de um pixel dinamicamente
 * TODO - Definir a quantidade de dígitos do valor do pixel dinamicamente
 */
 
@@ -12,14 +11,13 @@
 #include<string.h>
 
 #define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
-#define MAIOR_VALOR_PIXEL 255 /*Define o maior valor possível de um pixel*/
 
 int main(void)
 {
 	/*É somando 1 para que não seja necessário utilizar o posição 0.
 	 *Dessa forma o número de ocorrências de pixels com valor 1 fica
          *na posição 1 e assim em diante */
-	int ocorrenciasPixels[MAIOR_VALOR_PIXEL+1], i;
+	int *ocorrenciasPixels, i, maior_pixel = 0;
 	char numero[TAMANHO_DIGITO_NUMERO];
 	FILE *arquivo = fopen("Unequalized_Hawkes_Bay.pgm","r");
 
@@ -29,11 +27,10 @@ int main(void)
 	}
 	
 	/*Zerando as posições de memória*/
-	memset(ocorrenciasPixels, 0, sizeof(ocorrenciasPixels));
 	memset(numero, 0, sizeof(numero));
 	
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
-		int linhasPuladas = 0, pos_numero = 0;
+		int linhas = 1, pos_numero = 0;
 		char charAtual;
 
 		/*Lê o arquivo até o talo! */
@@ -42,17 +39,31 @@ int main(void)
 
 			if(charAtual == '#') { /* Ignora linha de comentario*/
                         	while(fgetc(arquivo) != '\n');
-				/* Se houver uma linha de comentario, estao decrementamos o numero de linhas
-				 * puladas, uma vez que o numero de linhas de cabecalho agora é 4, devemos pular
-				 * de linhas mais uma vez */
+				continue;
+			} else if (charAtual == '\n') {
+				linhas++;
+			}
+
+			/* Verifica se é a linha que indica o valor do
+			 * maior pixel  */
+			if (linhas == 3) {
+				charAtual = fgetc(arquivo);
+				while (charAtual != '\n') {
+					numero[pos_numero++] = charAtual;
+					charAtual = fgetc(arquivo);
+				}
+				maior_pixel = atoi(numero);
+				printf("Maior pixel == %d\n", atoi(numero));
+				ocorrenciasPixels = (int *)malloc(maior_pixel + 1);
+				memset(ocorrenciasPixels, 0, maior_pixel + 1);
+				memset(numero, 0, sizeof(numero));
+				pos_numero = 0;
+				linhas++;
 				continue;
 			}
 
-                        else if (charAtual == '\n')
-				linhasPuladas++;
-
 			/* Pula cabecalho */
-			if (linhasPuladas < 3)
+			if (linhas <= 3)
 				continue;
 
 			if (isdigit(charAtual)) {
@@ -73,9 +84,9 @@ int main(void)
 			}
 		}
 
-		for(i = 1; i <= MAIOR_VALOR_PIXEL; i++)
+		for(i = 1; i <= maior_pixel; i++)
 			if (ocorrenciasPixels[i] > 0)
-				printf("O valor %d possui %d ocorrências\n", i,ocorrenciasPixels[i]);
+				printf("O valor %d possui %d ocorrências\n", i, ocorrenciasPixels[i]);
 
 	} else {
 		printf("Arquivo não segue formato PGM ASCII!\n");
