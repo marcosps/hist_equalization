@@ -50,7 +50,7 @@ int main(void)
 				/* Se houver uma linha de comentario, estao decrementamos o numero de linhas
 				 * puladas, uma vez que o numero de linhas de cabecalho agora é 4, devemos pular
 				 * de linhas mais uma vez */
-				linhasPuladas--;
+				continue;
 			}
 
                         else if (charAtual == '\n')
