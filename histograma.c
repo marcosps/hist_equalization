@@ -12,7 +12,6 @@
 #include<stdlib.h>
 #include<string.h>
 
-#define ESPACO 32 /*Define do  ' ' ( espaço em branco) */
 #define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
 #define MAIOR_VALOR_PIXEL 255 /*Define o maior valor possível de um pixel*/
 
