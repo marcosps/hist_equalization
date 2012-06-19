@@ -2,15 +2,22 @@
 * Esse fonte é responsável em gerar o histograma da imagem. 
 * Atualmente ele está em um fonte separado, mas futuramente o fonte 
 * será colocado dentro de uma função em outro fonte.
+*
 * TODO - Definir a quantidade de dígitos do valor do pixel dinamicamente
+* TODO - Pegar area dos pixels de forma dinamica
 */
 
 #include<stdio.h>
 #include<ctype.h>
 #include<stdlib.h>
 #include<string.h>
+#include<math.h>
 
 #define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
+
+int cdf_min = 0;
+int cdf_max = 0;
+int maior_pixel = 0;
 
 /* Gera distribuições acumuladas 
  * cada pixel posterior tem o peso dos pixels
@@ -23,9 +30,68 @@ void cdf(int *ori, int *nova, int maior_pixel)
 	for(i = 1; i <= maior_pixel; i++) {
 		if (ori[i] > 0) {
 			s += ori[i];
+			/* Coloca valor minimo da acumulada */
+			if (cdf_min == 0)
+				cdf_min = s;
+
 			nova[i] = s;
 		}
 	}
+
+	/* acumulada maxima */
+	cdf_max = s;
+}
+
+/* Gera nova imagem PGM já equalizada */
+void monta_novo_arquivo(int *cdf)
+{
+	FILE *f = fopen("Unequalized_Hawkes_Bay.pgm","r");
+	FILE *n = fopen("nova.pgm", "w");
+	int linha = 1, num_pos = 0;
+	char *line = NULL;
+	ssize_t read;
+	size_t len = 0;
+	
+	while((read = getline(&line, &len, f)) != -1) {
+		if (line[0] == '#') {
+			fprintf(n, line);
+		} else if (linha <= 3) {
+			fprintf(n, line);
+			linha++;
+		} else {
+			int i, he;
+			char tmp[read], numero[TAMANHO_DIGITO_NUMERO];
+			memset(numero, 0, sizeof(numero));
+			memset(tmp, 0, sizeof(tmp));
+
+			for(i = 0; i < read - 1; i++) {
+				if (isdigit(line[i])) {
+					numero[num_pos++] = line[i];
+				} else {					
+					double tmp_var = cdf[atoi(numero)] - cdf_min;
+					tmp_var /= (60000 - cdf_min);
+					tmp_var *= maior_pixel;
+					he = round(tmp_var);
+					/* se o novo valor equalizado tiver menos de 3 digitos */
+					if (he < 100)
+						strcat(tmp, " ");
+
+					sprintf(numero, "%d", he);
+					strcat(tmp, numero);
+
+					memset(numero, 0, sizeof(numero));
+					num_pos = 0;
+					/* separar pixels */
+					strcat(tmp, " ");
+				}
+			}
+			strcat(tmp, "\n");
+			fprintf(n, tmp);
+		}
+	}
+	fclose(f);
+	fclose(n);
+	free(line);
 }
 
 int main(void)
@@ -33,7 +99,7 @@ int main(void)
 	/*É somando 1 para que não seja necessário utilizar o posição 0.
 	 *Dessa forma o número de ocorrências de pixels com valor 1 fica
          *na posição 1 e assim em diante */
-	int *ocorrenciasPixels, *acumulada, i, maior_pixel = 0;
+	int *ocorrenciasPixels, *acumulada;
 	char numero[TAMANHO_DIGITO_NUMERO];
 	FILE *arquivo = fopen("Unequalized_Hawkes_Bay.pgm","r");
 
@@ -48,6 +114,8 @@ int main(void)
 	if((fgetc(arquivo) == 'P' && fgetc(arquivo) == '2')){
 		int linhas = 1, pos_numero = 0;
 		char charAtual;
+
+		printf("Gerando histograma...\n");
 
 		/*Lê o arquivo até o talo! */
 		while (!feof(arquivo)) {
@@ -69,7 +137,6 @@ int main(void)
 					charAtual = fgetc(arquivo);
 				}
 				maior_pixel = atoi(numero);
-				printf("Maior pixel == %d\n", atoi(numero));
 				ocorrenciasPixels = (int *)malloc(sizeof(int) * (maior_pixel + 1));
 				acumulada = (int *)malloc(sizeof(int) * (maior_pixel + 1));
 				memset(ocorrenciasPixels, 0, maior_pixel + 1);
@@ -102,22 +169,22 @@ int main(void)
 			}
 		}
 
-		for(i = 1; i <= maior_pixel; i++)
-			if (ocorrenciasPixels[i] > 0)
-				printf("O valor %d possui %d ocorrências\n", i, ocorrenciasPixels[i]);
+		printf("Histograma finalizado\n");
+		printf("Gerando distribuição acumulada...\n");
 
 		cdf(ocorrenciasPixels, acumulada, maior_pixel);
 
-		for(i = 1; i <= maior_pixel; i++)
-			if (acumulada[i] > 0)
-				printf("O valor %d possui %d de acumulado\n", i, acumulada[i]);
+		printf("Distribuição gerada\n");
 
 	} else {
 		printf("Arquivo não segue formato PGM ASCII!\n");
 	}
 
 	fclose(arquivo);
-	printf("Acabou!\n");
+	
+	printf("Gerando nova imagem PGM...\n");
+	monta_novo_arquivo(acumulada);
+	printf("Nova imagem gerada com sucesso!\n");
 
 	return 0;
 }

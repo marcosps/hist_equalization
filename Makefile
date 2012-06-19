@@ -1,4 +1,4 @@
 all:
-	gcc histograma.c -Wall -o h
+	gcc histograma.c -Wall -o h -lm
 debug:
-	gcc histograma.c -Wall -o h -g
+	gcc histograma.c -Wall -o h -g -lm
