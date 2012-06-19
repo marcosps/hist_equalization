@@ -4,7 +4,6 @@
 * será colocado dentro de uma função em outro fonte.
 *
 * TODO - Definir a quantidade de dígitos do valor do pixel dinamicamente
-* TODO - Pegar area dos pixels de forma dinamica
 */
 
 #include<stdio.h>
@@ -18,6 +17,8 @@
 int cdf_min = 0;
 int cdf_max = 0;
 int maior_pixel = 0;
+int largura = 0;
+int altura = 0;
 
 /* Gera distribuições acumuladas 
  * cada pixel posterior tem o peso dos pixels
@@ -69,7 +70,7 @@ void monta_novo_arquivo(int *cdf)
 					numero[num_pos++] = line[i];
 				} else {					
 					double tmp_var = cdf[atoi(numero)] - cdf_min;
-					tmp_var /= (60000 - cdf_min);
+					tmp_var /= (largura * altura - cdf_min);
 					tmp_var *= maior_pixel;
 					he = round(tmp_var);
 					/* se o novo valor equalizado tiver menos de 3 digitos */
@@ -125,6 +126,29 @@ int main(void)
                         	while(fgetc(arquivo) != '\n');
 				continue;
 			} else if (charAtual == '\n') {
+				linhas++;
+				continue;
+			}
+
+			/* Verifica se é a linha com as dimensões da imagem */
+			if (linhas == 2) {
+				while(charAtual != ' ') {
+					numero[pos_numero++] = charAtual;
+					charAtual = fgetc(arquivo);
+				}
+				largura = atoi(numero);
+				memset(numero, 0, sizeof(numero));
+				pos_numero = 0;
+
+				charAtual = fgetc(arquivo);
+				while(charAtual != '\n') {
+					numero[pos_numero++] = charAtual;
+					charAtual = fgetc(arquivo);
+				}
+				altura = atoi(numero);
+				
+				memset(numero, 0, sizeof(numero));
+				pos_numero = 0;
 				linhas++;
 			}
 
