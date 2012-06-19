@@ -210,5 +210,8 @@ int main(void)
 	monta_novo_arquivo(acumulada);
 	printf("Nova imagem gerada com sucesso!\n");
 
+	free(ocorrenciasPixels);
+	free(acumulada);
+
 	return 0;
 }
