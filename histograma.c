@@ -54,7 +54,7 @@ int main(void)
 				}
 				maior_pixel = atoi(numero);
 				printf("Maior pixel == %d\n", atoi(numero));
-				ocorrenciasPixels = (int *)malloc(maior_pixel + 1);
+				ocorrenciasPixels = (int *)malloc(sizeof(int) * (maior_pixel + 1));
 				memset(ocorrenciasPixels, 0, maior_pixel + 1);
 				memset(numero, 0, sizeof(numero));
 				pos_numero = 0;
