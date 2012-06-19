@@ -12,12 +12,28 @@
 
 #define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
 
+/* Gera distribuições acumuladas 
+ * cada pixel posterior tem o peso dos pixels
+ * pixels anterioes somados
+ * */
+void cdf(int *ori, int *nova, int maior_pixel)
+{
+	int i, s = 0;
+
+	for(i = 1; i <= maior_pixel; i++) {
+		if (ori[i] > 0) {
+			s += ori[i];
+			nova[i] = s;
+		}
+	}
+}
+
 int main(void)
 {
 	/*É somando 1 para que não seja necessário utilizar o posição 0.
 	 *Dessa forma o número de ocorrências de pixels com valor 1 fica
          *na posição 1 e assim em diante */
-	int *ocorrenciasPixels, i, maior_pixel = 0;
+	int *ocorrenciasPixels, *acumulada, i, maior_pixel = 0;
 	char numero[TAMANHO_DIGITO_NUMERO];
 	FILE *arquivo = fopen("Unequalized_Hawkes_Bay.pgm","r");
 
@@ -55,7 +71,9 @@ int main(void)
 				maior_pixel = atoi(numero);
 				printf("Maior pixel == %d\n", atoi(numero));
 				ocorrenciasPixels = (int *)malloc(sizeof(int) * (maior_pixel + 1));
+				acumulada = (int *)malloc(sizeof(int) * (maior_pixel + 1));
 				memset(ocorrenciasPixels, 0, maior_pixel + 1);
+				memset(acumulada, 0, maior_pixel + 1);
 				memset(numero, 0, sizeof(numero));
 				pos_numero = 0;
 				linhas++;
@@ -87,6 +105,12 @@ int main(void)
 		for(i = 1; i <= maior_pixel; i++)
 			if (ocorrenciasPixels[i] > 0)
 				printf("O valor %d possui %d ocorrências\n", i, ocorrenciasPixels[i]);
+
+		cdf(ocorrenciasPixels, acumulada, maior_pixel);
+
+		for(i = 1; i <= maior_pixel; i++)
+			if (acumulada[i] > 0)
+				printf("O valor %d possui %d de acumulado\n", i, acumulada[i]);
 
 	} else {
 		printf("Arquivo não segue formato PGM ASCII!\n");
