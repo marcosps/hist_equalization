@@ -55,9 +55,9 @@ void monta_novo_arquivo(char *ori_file, int *cdf)
 	
 	while((read = getline(&line, &len, f)) != -1) {
 		if (line[0] == '#') {
-			fprintf(n, line);
+			fprintf(n, "%s", line);
 		} else if (linha <= 3) {
-			fprintf(n, line);
+			fprintf(n, "%s", line);
 			linha++;
 		} else {
 			int i, he;
@@ -87,7 +87,7 @@ void monta_novo_arquivo(char *ori_file, int *cdf)
 				}
 			}
 			strcat(tmp, "\n");
-			fprintf(n, tmp);
+			fprintf(n, "%s", tmp);
 		}
 	}
 	fclose(f);
