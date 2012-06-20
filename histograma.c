@@ -12,7 +12,7 @@
 #include<string.h>
 #include<math.h>
 
-#define TAMANHO_DIGITO_NUMERO 3 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
+#define TAMANHO_DIGITO_NUMERO 4 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
 
 int cdf_min = 0;
 int cdf_max = 0;
