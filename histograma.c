@@ -13,6 +13,9 @@
 #include<math.h>
 
 #define TAMANHO_DIGITO_NUMERO 4 /*Define a quantidade de dígitos máxima que podem existir no valor do pixel */
+#define DISTANCIA_SEGURA 100 /* mais espaco no buffer caso o calculo do novo pixel seja
+			      * maior que o espaco do pixel antigo
+			      * */
 
 int cdf_min = 0;
 int cdf_max = 0;
@@ -61,22 +64,31 @@ void monta_novo_arquivo(char *ori_file, int *cdf)
 			linha++;
 		} else {
 			int i, he;
-			char tmp[read], numero[TAMANHO_DIGITO_NUMERO];
+			char tmp[read + DISTANCIA_SEGURA], 
+			     numero[TAMANHO_DIGITO_NUMERO];
 			memset(numero, 0, sizeof(numero));
 			memset(tmp, 0, sizeof(tmp));
 
 			for(i = 0; i < read - 1; i++) {
 				if (isdigit(line[i])) {
 					numero[num_pos++] = line[i];
-				} else {					
-					double tmp_var = cdf[atoi(numero)] - cdf_min;
-					tmp_var /= (largura * altura - cdf_min);
-					tmp_var *= maior_pixel;
-					he = round(tmp_var);
-					/* se o novo valor equalizado tiver menos de 3 digitos */
-					if (he < 100)
-						strcat(tmp, " ");
+				} else {
+					if (atoi(numero) > 0) {
+						double tmp_var = cdf[atoi(numero)] - cdf_min;
+						tmp_var /= (largura * altura - cdf_min);
+						tmp_var *= maior_pixel;
+						he = round(tmp_var);
 
+						if (he < 0)
+							printf("linha == %d e numero %s\n", linha, numero);
+
+						/* se o novo valor equalizado tiver menos de 3 digitos */
+						if (he < 100)
+							strcat(tmp, " ");
+
+					} else {
+						he = 0;
+					}
 					sprintf(numero, "%d", he);
 					strcat(tmp, numero);
 
@@ -88,6 +100,7 @@ void monta_novo_arquivo(char *ori_file, int *cdf)
 			}
 			strcat(tmp, "\n");
 			fprintf(n, "%s", tmp);
+			linha++;
 		}
 	}
 	fclose(f);
